@@ -17,7 +17,7 @@ class IncrementStateNotifier extends StateNotifier {
   int _counter = 0;
 
   IncrementStateNotifier() {
-    observable<int>(initial: _counter); //register a state which can be processed by this StateNotifier
+    observable<int>(initial: _counter); //registers a state which can be processed by this StateNotifier
   }
 
   void useCase() {
@@ -39,11 +39,11 @@ StateObserver<IncrementStateNotifier, int>(
         return Text(
         '$value',
         style: Theme.of(context).textTheme.headline4,
-        );
-    },
+    );
+  },
 );
 ```
-3. `StateNotifierProvider` - takes a `create` function that is responsible for creating the `StateNotifier`, `child` widget which will have access to the `StateNotifier` instance via `Provider.of<StateNotifier>(context)` or `context.read<StateNotifier>()` and optional `router` function that will receive navigation events.
+3. `StateNotifierProvider` - takes a `create` function that is responsible for creating the `StateNotifier`, `child` widget which will have access to the `StateNotifier` instance via `Provider.of<StateNotifier>(context)` or `context.read<StateNotifier>()` and optional `router` function which will receive navigation events.
 ```dart
 StateNotifierProvider<IncrementStateNotifier>(
     create: (_) => IncrementStateNotifier(),
