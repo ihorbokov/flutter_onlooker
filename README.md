@@ -35,9 +35,8 @@ class IncrementStateNotifier extends StateNotifier {
 ```dart
 StateObserver<IncrementStateNotifier, int>(
   builder: (_, state) {
-    final value = state ?? 0;
     return Text(
-      '$value',
+      '$state',
       style: Theme.of(context).textTheme.headline4,
     );
   },
@@ -47,15 +46,14 @@ StateObserver<IncrementStateNotifier, int>(
 ```dart
 StateNotifierProvider<IncrementStateNotifier>(
   create: (_) => IncrementStateNotifier(),
-  child: const HomePage(title: 'Flutter Onlooker Demo'),
+  child: const MyHomePage(title: 'Onlooker Demo'),
   router: (context, route) {
-    if (route is int?) {
-      final value = route ?? 0;
-      showDialog(
+    if (route is int) {
+      showDialog<void>(
         context: context,
         builder: (_) => AlertDialog(
           title: const Text('Counter info'),
-          content: Text('You have clicked $value times!'),
+          content: Text('You have clicked $route times!'),
         ),
       );
     }
