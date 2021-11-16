@@ -24,8 +24,8 @@ class IncrementStateNotifier extends StateNotifier {
     final initialState = initial<int>(); //0 - initial value of state int
     final latestState = latest<int>(); //0 - the latest value of state int
     final containsState = contains<int>(); //true - int state is registered for this StateNotifier
-    notify<int>(++_counter); //notifies StateObserver about new state
-    navigate<void>(_counter); //emits new navigation event to StateNotifierProvider
+    notify<int>(++_counter); //notifies StateObserver about a new state
+    navigate<void>(_counter); //emits a new navigation event to StateNotifierProvider
   }
 }
 ```

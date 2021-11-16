@@ -3,7 +3,7 @@ import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
 
-/// A callback function that use to return navigation result to the [StateNotifier].
+/// A callback function that is used to return navigation result to the [StateNotifier].
 typedef ResultConsumer<T> = void Function(Future<T>?);
 
 /// This class provides mechanism of delivering new UI `states` and navigation
