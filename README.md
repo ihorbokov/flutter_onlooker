@@ -34,11 +34,11 @@ class IncrementStateNotifier extends StateNotifier {
 * An optional `notifier` which can be passed directly or with using `StateNotifierProvider`.
 ```dart
 StateObserver<IncrementStateNotifier, int>(
-    builder: (_, state) {
-        final value = state ?? 0;
-        return Text(
-        '$value',
-        style: Theme.of(context).textTheme.headline4,
+  builder: (_, state) {
+    final value = state ?? 0;
+    return Text(
+      '$value',
+      style: Theme.of(context).textTheme.headline4,
     );
   },
 );
@@ -46,19 +46,19 @@ StateObserver<IncrementStateNotifier, int>(
 3. `StateNotifierProvider` - takes a `create` function that is responsible for creating the `StateNotifier`, `child` widget which will have access to the `StateNotifier` instance via `Provider.of<StateNotifier>(context)` or `context.read<StateNotifier>()` and optional `router` function which will receive navigation events.
 ```dart
 StateNotifierProvider<IncrementStateNotifier>(
-    create: (_) => IncrementStateNotifier(),
-    child: const HomePage(title: 'Flutter Onlooker Demo'),
-    router: (context, route) {
-        if (route is int?) {
-            final value = route ?? 0;
-            showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-                title: const Text('Counter info'),
-                content: Text('You have clicked $value times!'),
-            ),
-         );
-      }
-   },
+  create: (_) => IncrementStateNotifier(),
+  child: const HomePage(title: 'Flutter Onlooker Demo'),
+  router: (context, route) {
+    if (route is int?) {
+      final value = route ?? 0;
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Counter info'),
+          content: Text('You have clicked $value times!'),
+        ),
+      );
+    }
+  },
 );
 ```
