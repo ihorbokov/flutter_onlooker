@@ -96,6 +96,6 @@ class IncrementStateNotifier extends StateNotifier {
 
   void showCounterInfo() {
     final latestState = latest<int>()!;
-    navigate(latestState);
+    navigate<void>(latestState);
   }
 }

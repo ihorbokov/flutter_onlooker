@@ -1,3 +1,7 @@
+## [1.0.1] - 2021/11/17
+
+* Updated example and Readme.
+
 ## [1.0.0] - 2021/11/16
 
 Initial version of the library.

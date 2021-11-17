@@ -4,7 +4,7 @@ A state management library which provides a simple solution for updating state a
 ## Usage
 Lets take a look at how to use `flutter_onlooker`. The library provides: `StateNotifier`, `StateObserver` and `StateNotifierProvider` classes.
 
-1. `StateNotifier` is responsible for registering and notifying states. Also it can emit navigation events. Let's look on the main methods of this class.
+1. `StateNotifier` is responsible for registering and notifying states. Also it can emit navigation events. The main methods of this class:
 * `observable<S>` - registers observable state of `S` type.
 * `initial<S>` - returns initial value for state of `S` type.
 * `latest<S>` - returns the latest value for state of `S` type.
@@ -17,15 +17,16 @@ class IncrementStateNotifier extends StateNotifier {
   int _counter = 0;
 
   IncrementStateNotifier() {
-    observable<int>(initial: _counter); //registers a state which can be processed by this StateNotifier
+    observable<int>(initial: _counter);
   }
 
   void useCase() {
-    final initialState = initial<int>(); //0 - initial value of state int
-    final latestState = latest<int>(); //0 - the latest value of state int
-    final containsState = contains<int>(); //true - int state is registered for this StateNotifier
-    notify<int>(++_counter); //notifies StateObserver about a new state
-    navigate<void>(_counter); //emits a new navigation event to StateNotifierProvider
+    final initialState = initial<int>();
+    final latestState = latest<int>();
+    final containsState = contains<int>();
+
+    notify<int>(++_counter);
+    navigate<void>(_counter);
   }
 }
 ```
@@ -47,7 +48,7 @@ StateObserver<IncrementStateNotifier, int>(
 StateNotifierProvider<IncrementStateNotifier>(
   create: (_) => IncrementStateNotifier(),
   child: const MyHomePage(title: 'Onlooker Demo'),
-  router: (context, route) {
+  router: (context, dynamic route) {
     if (route is int) {
       showDialog<void>(
         context: context,
