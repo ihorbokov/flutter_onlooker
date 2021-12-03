@@ -1,10 +1,4 @@
-import 'dart:async';
-
-import 'package:flutter/widgets.dart';
-
-import 'state_notifier.dart';
-import 'state_notifier_provider.dart';
-import 'state_notifier_subscriber.dart';
+part of flutter_onlooker;
 
 /// Signature for the `builder` function which takes the `BuildContext` and
 /// [state] and is responsible for returning a widget which is to be rendered.

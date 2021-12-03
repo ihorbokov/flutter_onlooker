@@ -1,7 +1,4 @@
-import 'dart:async';
-import 'dart:collection';
-
-import 'package:flutter/widgets.dart';
+part of flutter_onlooker;
 
 /// A callback function that is used to return navigation result to the [StateNotifier].
 typedef ResultConsumer<T> = void Function(Future<T>?);
