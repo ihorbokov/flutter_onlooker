@@ -13,7 +13,7 @@ typedef Router<T> = Future<T>? Function(
 /// Exposes the [read] method.
 extension ReadContext on BuildContext {
   /// Obtain a value from the nearest ancestor provider of type [StateNotifier].
-  N? read<N extends StateNotifier>({bool listen = false}) =>
+  N read<N extends StateNotifier>({bool listen = false}) =>
       Provider.of<N>(this, listen: listen);
 }
 
@@ -28,9 +28,10 @@ class Provider<N extends StateNotifier> extends InheritedWidget {
     required Widget child,
   }) : super(key: key, child: child);
 
-  /// Obtains the nearest [StateNotifier]. Returns null if no such element is found.
+  /// Obtains the nearest [StateNotifier] up its widget tree.
+  ///
   /// The build context is rebuilt when [StateNotifier] is changed if [listen] set to `true`.
-  static N? of<N extends StateNotifier>(
+  static N of<N extends StateNotifier>(
     BuildContext context, {
     bool listen = false,
   }) {
@@ -38,7 +39,8 @@ class Provider<N extends StateNotifier> extends InheritedWidget {
         ? context.dependOnInheritedWidgetOfExactType<Provider<N>>()
         : context.getElementForInheritedWidgetOfExactType<Provider<N>>()?.widget
             as Provider<N>;
-    return provider?.stateNotifier;
+    assert(provider != null, 'No Provider<${N.runtimeType}> found in context.');
+    return provider!.stateNotifier;
   }
 
   @override
@@ -70,13 +72,7 @@ class StateNotifierProvider<N extends StateNotifier>
 class _StateNotifierProviderState<N extends StateNotifier>
     extends StateNotifierSubscriberState<N, NavigationItem,
         StateNotifierProvider<N>> {
-  late final N _stateNotifier;
-
-  @override
-  void initState() {
-    _stateNotifier = widget.create(context);
-    super.initState();
-  }
+  late final N _stateNotifier = widget.create(context);
 
   @override
   Widget build(BuildContext context) {

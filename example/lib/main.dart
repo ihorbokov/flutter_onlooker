@@ -66,8 +66,7 @@ class MyHomePage extends StatelessWidget {
               height: 8.0,
             ),
             ElevatedButton(
-              onPressed:
-                  context.read<IncrementStateNotifier>()?.showCounterInfo,
+              onPressed: context.read<IncrementStateNotifier>().showCounterInfo,
               child: const Text(
                 'Show counter value',
               ),
@@ -76,7 +75,7 @@ class MyHomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: context.read<IncrementStateNotifier>()?.increment,
+        onPressed: context.read<IncrementStateNotifier>().increment,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),

@@ -24,13 +24,7 @@ class StateObserver<N extends StateNotifier, S>
 
 class _StateObserverState<N extends StateNotifier, S>
     extends StateNotifierSubscriberState<N, S, StateObserver<N, S>> {
-  N? _stateNotifier;
-
-  @override
-  void initState() {
-    _stateNotifier = widget.notifier ?? context.read<N>();
-    super.initState();
-  }
+  late N _stateNotifier = widget.notifier ?? context.read<N>();
 
   @override
   void didUpdateWidget(covariant StateObserver<N, S> oldWidget) {
@@ -54,13 +48,13 @@ class _StateObserverState<N extends StateNotifier, S>
   }
 
   @override
-  S? get initialState => _stateNotifier?.initial<S>();
+  S? get initialState => _stateNotifier.initial<S>();
 
   @override
   void onNewState(S? state) => setState(() {});
 
   @override
-  Stream<S?>? get stream => _stateNotifier?.getStateStream<S>();
+  Stream<S?>? get stream => _stateNotifier.getStateStream<S>();
 
   @override
   Widget build(BuildContext context) => widget.builder(context, currentState);
