@@ -1,4 +1,7 @@
-part of flutter_onlooker;
+import 'package:flutter/widgets.dart';
+
+import 'state_notifier.dart';
+import 'state_notifier_subscriber.dart';
 
 /// A function that creates an object of type [T].
 typedef Create<T> = T Function(BuildContext context);

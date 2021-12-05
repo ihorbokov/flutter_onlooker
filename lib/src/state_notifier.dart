@@ -1,4 +1,7 @@
-part of flutter_onlooker;
+import 'dart:async';
+import 'dart:collection';
+
+import 'package:flutter/widgets.dart';
 
 /// A callback function that is used to return navigation result to the [StateNotifier].
 typedef ResultConsumer<T> = void Function(Future<T>?);
@@ -196,6 +199,7 @@ class _StateItem<S> {
   void add(S? state) {
     if (!controller.isClosed && controller.hasListener) {
       controller.sink.add(state);
+      latestState = state;
     }
   }
 }

@@ -30,9 +30,10 @@ class IncrementStateNotifier extends StateNotifier {
   }
 }
 ```
-2. `StateObserver` handles building a widget in response to new `states`. It takes 2 parameters:
+2. `StateObserver` handles building a widget in response to new `states`. It takes 3 parameters:
 * required `builder` function which takes the `BuildContext` and `state`, this function is responsible for returning a widget which is to be rendered. `state` value can be null, because `initial` value is optional in `observable<S>` method.
 * An optional `notifier` which can be passed directly or with using `StateNotifierProvider`.
+* An optional `buildWhen` can be implemented for more granular control over how often `StateObserver` rebuilds.
 ```dart
 StateObserver<IncrementStateNotifier, int>(
   builder: (_, state) {

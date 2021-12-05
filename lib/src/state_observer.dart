@@ -1,4 +1,10 @@
-part of flutter_onlooker;
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+
+import 'state_notifier.dart';
+import 'state_notifier_provider.dart';
+import 'state_notifier_subscriber.dart';
 
 /// Signature for the `buildWhen` function which takes the previous `state` and
 /// the current `state` and is responsible for returning a [bool] which
@@ -61,9 +67,7 @@ class _StateObserverState<N extends StateNotifier, S>
   S? get initialState => _stateNotifier.initial<S>();
 
   @override
-  void onNewState(S? state) {
-    setState(() => _stateNotifier._stateController[S].latestState = state);
-  }
+  void onNewState(S? state) => setState(() {});
 
   @override
   Stream<S?>? get stream => _stateNotifier.getStateStream<S>();

@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-import '../flutter_onlooker.dart';
+import 'state_notifier.dart';
+import 'state_observer.dart';
 
 abstract class StateNotifierSubscriber<N extends StateNotifier, S>
     extends StatefulWidget {
