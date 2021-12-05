@@ -28,6 +28,9 @@ abstract class StateNotifierSubscriberState<N extends StateNotifier, S,
     _subscribe();
   }
 
+  @protected
+  void onNewState(covariant S? state);
+
   void _subscribe() {
     _subscription = stream?.listen((S? state) {
       currentState = state;
@@ -35,12 +38,20 @@ abstract class StateNotifierSubscriberState<N extends StateNotifier, S,
     });
   }
 
+  void _unsubscribe() {
+    _subscription?.cancel();
+    _subscription = null;
+  }
+
   @protected
-  void onNewState(covariant S? state);
+  void resubscribe() {
+    _unsubscribe();
+    _subscribe();
+  }
 
   @override
   void dispose() {
-    _subscription?.cancel();
+    _unsubscribe();
     super.dispose();
   }
 }
