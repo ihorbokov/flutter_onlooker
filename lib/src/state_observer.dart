@@ -1,5 +1,10 @@
 part of flutter_onlooker;
 
+/// Signature for the `buildWhen` function which takes the previous `state` and
+/// the current `state` and is responsible for returning a [bool] which
+/// determines whether to rebuild [StateObserver] with the current `state`.
+typedef Condition<S> = bool Function(S? previous, S? current);
+
 /// Signature for the `builder` function which takes the `BuildContext` and
 /// [state] and is responsible for returning a widget which is to be rendered.
 typedef WidgetBuilder<S> = Widget Function(BuildContext context, S? state);
@@ -11,12 +16,17 @@ class StateObserver<N extends StateNotifier, S>
   final WidgetBuilder<S> builder;
 
   /// [StateObserver] rebuilds using [builder] function.
+  ///
   /// An optional [notifier] can be passed directly.
+  ///
+  /// An optional [buildWhen] can be implemented for more granular control over
+  /// how often [StateObserver] rebuilds.
   const StateObserver({
     Key? key,
     this.notifier,
+    Condition<S>? buildWhen,
     required this.builder,
-  }) : super(key: key);
+  }) : super(key: key, condition: buildWhen);
 
   @override
   State<StatefulWidget> createState() => _StateObserverState<N, S>();
@@ -51,7 +61,9 @@ class _StateObserverState<N extends StateNotifier, S>
   S? get initialState => _stateNotifier.initial<S>();
 
   @override
-  void onNewState(S? state) => setState(() {});
+  void onNewState(S? state) {
+    setState(() => _stateNotifier._stateController[S].latestState = state);
+  }
 
   @override
   Stream<S?>? get stream => _stateNotifier.getStateStream<S>();

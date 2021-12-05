@@ -6,7 +6,9 @@ import '../flutter_onlooker.dart';
 
 abstract class StateNotifierSubscriber<N extends StateNotifier, S>
     extends StatefulWidget {
-  const StateNotifierSubscriber({Key? key}) : super(key: key);
+  final Condition<S>? condition;
+
+  const StateNotifierSubscriber({Key? key, this.condition}) : super(key: key);
 }
 
 abstract class StateNotifierSubscriberState<N extends StateNotifier, S,
@@ -14,6 +16,7 @@ abstract class StateNotifierSubscriberState<N extends StateNotifier, S,
   StreamSubscription<S?>? _subscription;
 
   S? currentState;
+  S? previousState;
 
   @protected
   Stream<S?>? get stream;
@@ -33,8 +36,11 @@ abstract class StateNotifierSubscriberState<N extends StateNotifier, S,
 
   void _subscribe() {
     _subscription = stream?.listen((S? state) {
-      currentState = state;
-      onNewState(state);
+      if (widget.condition?.call(previousState, state) ?? true) {
+        previousState = currentState;
+        currentState = state;
+        onNewState(state);
+      }
     });
   }
 
