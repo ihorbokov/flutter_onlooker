@@ -1,3 +1,7 @@
+# 1.1.1
+
+- Updated logic of notifying a new state.
+
 # 1.1.0
 
 - Added `buildWhen` condition to StateObserver.

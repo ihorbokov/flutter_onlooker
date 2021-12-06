@@ -197,7 +197,7 @@ class _StateItem<S> {
   _StateItem(this.controller, {this.initialState}) : latestState = initialState;
 
   void add(S? state) {
-    if (!controller.isClosed && controller.hasListener) {
+    if (!controller.isClosed) {
       controller.sink.add(state);
       latestState = state;
     }
