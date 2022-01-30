@@ -47,7 +47,6 @@ abstract class StateNotifierSubscriberState<N extends StateNotifier, S,
 
   void _unsubscribe() {
     _subscription?.cancel();
-    _subscription = null;
   }
 
   @protected

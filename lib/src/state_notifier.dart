@@ -23,16 +23,15 @@ abstract class StateNotifier {
   /// Registers observable state of `S` type that can be processed by this [StateNotifier].
   ///
   /// [initial] defines initial state of observable type.
-  /// [broadcast] defines type of stream that will be created.
   ///
   /// Throws [StateError] if some type of `state` registered twice or if [StateNotifier] was disposed.
   @protected
-  void observable<S>({S? initial, bool broadcast = false}) {
+  void observable<S>({S? initial}) {
     if (_disposed) {
       throw StateError('Can\'t register state - $runtimeType is disposed.');
     }
     _stateController[S] = _StateItem<S>(
-      broadcast ? StreamController<S?>.broadcast() : StreamController<S?>(),
+      StreamController<S?>.broadcast(),
       initialState: initial,
     );
   }
