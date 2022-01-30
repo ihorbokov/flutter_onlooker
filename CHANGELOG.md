@@ -1,3 +1,7 @@
+# 1.2.0
+
+- Fixed performing hot reload issue of StateObserver.
+
 # 1.1.1
 
 - Updated logic of notifying a new state.
