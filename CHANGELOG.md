@@ -1,3 +1,7 @@
+# 1.2.1
+
+- Updated logic of getting initial state.
+
 # 1.2.0
 
 - Fixed performing hot reload issue of StateObserver.

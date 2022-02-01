@@ -35,19 +35,17 @@ abstract class StateNotifierSubscriberState<N extends StateNotifier, S,
   @protected
   void onNewState(covariant S? state);
 
-  void _subscribe() {
-    _subscription = stream?.listen((S? state) {
-      if (widget.condition?.call(previousState, state) ?? true) {
-        previousState = currentState;
-        currentState = state;
-        onNewState(state);
-      }
-    });
+  void _subscribe() => _subscription = stream?.listen(_handleState);
+
+  void _handleState(S? state) {
+    if (widget.condition?.call(previousState, state) ?? true) {
+      previousState = currentState;
+      currentState = state;
+      onNewState(state);
+    }
   }
 
-  void _unsubscribe() {
-    _subscription?.cancel();
-  }
+  void _unsubscribe() => _subscription?.cancel();
 
   @protected
   void resubscribe() {

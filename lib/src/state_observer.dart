@@ -64,7 +64,11 @@ class _StateObserverState<N extends StateNotifier, S>
   }
 
   @override
-  S? get initialState => _stateNotifier.initial<S>();
+  S? get initialState {
+    final initial = _stateNotifier.initial<S>();
+    final latest = _stateNotifier.latest<S>();
+    return initial != latest ? latest : initial;
+  }
 
   @override
   void onNewState(S? state) => setState(() {});

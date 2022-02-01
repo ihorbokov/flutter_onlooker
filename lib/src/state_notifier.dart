@@ -197,8 +197,8 @@ class _StateItem<S> {
 
   void add(S? state) {
     if (!controller.isClosed) {
-      controller.sink.add(state);
       latestState = state;
+      controller.sink.add(state);
     }
   }
 }
