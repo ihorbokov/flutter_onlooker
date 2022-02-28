@@ -55,7 +55,7 @@ class Provider<N extends StateNotifier> extends InheritedWidget {
 /// [child] which will have access to the instance via `Provider.of<StateNotifier>(context)` or
 /// `context.read<StateNotifier>()` and optional [router] function that will receive navigation events.
 class StateNotifierProvider<N extends StateNotifier>
-    extends StateNotifierSubscriber<N, NavigationItem> {
+    extends StateNotifierSubscriber<NavigationItem> {
   final Create<N> create;
   final Widget child;
   final Router? router;
@@ -73,7 +73,7 @@ class StateNotifierProvider<N extends StateNotifier>
 }
 
 class _StateNotifierProviderState<N extends StateNotifier>
-    extends StateNotifierSubscriberState<N, NavigationItem,
+    extends StateNotifierSubscriberState<NavigationItem,
         StateNotifierProvider<N>> {
   late final N _stateNotifier = widget.create(context);
 
@@ -86,14 +86,14 @@ class _StateNotifierProviderState<N extends StateNotifier>
   }
 
   @override
-  Stream<NavigationItem>? get stream =>
-      widget.router == null ? null : _stateNotifier.getNavigationStream();
-
-  @override
   void onNewState(NavigationItem state) {
     final result = widget.router?.call(context, state.route);
     state.resultConsumer(result);
   }
+
+  @override
+  Stream<NavigationItem>? get stream =>
+      widget.router == null ? null : _stateNotifier.getNavigationStream();
 
   @override
   void dispose() {

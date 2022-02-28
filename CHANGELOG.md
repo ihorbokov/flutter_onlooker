@@ -1,3 +1,7 @@
+# 2.0.0
+
+- Limited of nullable states usage.
+
 # 1.2.1
 
 - Updated logic of getting initial state.

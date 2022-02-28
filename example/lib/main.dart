@@ -18,15 +18,13 @@ class MyApp extends StatelessWidget {
         create: (_) => IncrementStateNotifier(),
         child: const MyHomePage(title: 'Onlooker Demo'),
         router: (context, dynamic route) {
-          if (route is int) {
-            showDialog<void>(
-              context: context,
-              builder: (_) => AlertDialog(
-                title: const Text('Counter info'),
-                content: Text('You\'ve clicked $route times!'),
-              ),
-            );
-          }
+          return showDialog<void>(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: const Text('Counter info'),
+              content: Text('You\'ve clicked $route times!'),
+            ),
+          );
         },
       ),
     );
@@ -89,12 +87,12 @@ class IncrementStateNotifier extends StateNotifier {
   }
 
   void increment() {
-    final latestState = latest<int>()!;
+    final latestState = latest<int>();
     notify<int>(latestState + 1);
   }
 
   void showCounterInfo() {
-    final latestState = latest<int>()!;
+    final latestState = latest<int>();
     navigate<void>(latestState);
   }
 }

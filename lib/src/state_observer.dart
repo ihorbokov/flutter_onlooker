@@ -9,16 +9,17 @@ import 'state_notifier_subscriber.dart';
 /// Signature for the `buildWhen` function which takes the previous `state` and
 /// the current `state` and is responsible for returning a [bool] which
 /// determines whether to rebuild [StateObserver] with the current `state`.
-typedef Condition<S> = bool Function(S? previous, S? current);
+typedef BuilderCondition<S> = bool Function(S previous, S current);
 
 /// Signature for the `builder` function which takes the `BuildContext` and
 /// [state] and is responsible for returning a widget which is to be rendered.
-typedef WidgetBuilder<S> = Widget Function(BuildContext context, S? state);
+typedef WidgetBuilder<S> = Widget Function(BuildContext context, S state);
 
 /// [StateObserver] handles building a widget in response to new `states`.
 class StateObserver<N extends StateNotifier, S>
-    extends StateNotifierSubscriber<N, S> {
+    extends StateNotifierSubscriber<S> {
   final N? notifier;
+  final BuilderCondition<S>? buildWhen;
   final WidgetBuilder<S> builder;
 
   /// [StateObserver] rebuilds using [builder] function.
@@ -30,17 +31,25 @@ class StateObserver<N extends StateNotifier, S>
   const StateObserver({
     Key? key,
     this.notifier,
-    Condition<S>? buildWhen,
+    this.buildWhen,
     required this.builder,
-  }) : super(key: key, condition: buildWhen);
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _StateObserverState<N, S>();
 }
 
 class _StateObserverState<N extends StateNotifier, S>
-    extends StateNotifierSubscriberState<N, S, StateObserver<N, S>> {
+    extends StateNotifierSubscriberState<S, StateObserver<N, S>> {
   late N _stateNotifier = widget.notifier ?? context.read<N>();
+
+  late S _state = _initialState;
+
+  S get _initialState {
+    final initial = _stateNotifier.initial<S>();
+    final latest = _stateNotifier.latest<S>();
+    return initial != latest ? latest : initial;
+  }
 
   @override
   void didUpdateWidget(covariant StateObserver<N, S> oldWidget) {
@@ -64,18 +73,15 @@ class _StateObserverState<N extends StateNotifier, S>
   }
 
   @override
-  S? get initialState {
-    final initial = _stateNotifier.initial<S>();
-    final latest = _stateNotifier.latest<S>();
-    return initial != latest ? latest : initial;
+  void onNewState(S state) {
+    if (widget.buildWhen?.call(_state, state) ?? true) {
+      setState(() => _state = state);
+    }
   }
 
   @override
-  void onNewState(S? state) => setState(() {});
+  Stream<S>? get stream => _stateNotifier.getStateStream<S>();
 
   @override
-  Stream<S?>? get stream => _stateNotifier.getStateStream<S>();
-
-  @override
-  Widget build(BuildContext context) => widget.builder(context, currentState);
+  Widget build(BuildContext context) => widget.builder(context, _state);
 }

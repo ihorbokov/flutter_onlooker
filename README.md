@@ -31,7 +31,7 @@ class IncrementStateNotifier extends StateNotifier {
 }
 ```
 2. `StateObserver` handles building a widget in response to new `states`. It takes 3 parameters:
-* required `builder` function which takes the `BuildContext` and `state`, this function is responsible for returning a widget which is to be rendered. `state` value can be null, because `initial` value is optional in `observable<S>` method.
+* required `builder` function which takes the `BuildContext` and `state`, this function is responsible for returning a widget which is to be rendered.
 * An optional `notifier` which can be passed directly or with using `StateNotifierProvider`.
 * An optional `buildWhen` can be implemented for more granular control over how often `StateObserver` rebuilds.
 ```dart
@@ -42,7 +42,7 @@ StateObserver<IncrementStateNotifier, int>(
       style: Theme.of(context).textTheme.headline4,
     );
   },
-);
+)
 ```
 3. `StateNotifierProvider` - takes a `create` function that is responsible for creating the `StateNotifier`, `child` widget which will have access to the `StateNotifier` instance via `Provider.of<StateNotifier>(context)` or `context.read<StateNotifier>()` and optional `router` function which will receive navigation events.
 ```dart
@@ -50,15 +50,13 @@ StateNotifierProvider<IncrementStateNotifier>(
   create: (_) => IncrementStateNotifier(),
   child: const MyHomePage(title: 'Onlooker Demo'),
   router: (context, dynamic route) {
-    if (route is int) {
-      showDialog<void>(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Counter info'),
-          content: Text('You have clicked $route times!'),
-        ),
-      );
-    }
+    return showDialog<void>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Counter info'),
+        content: Text('You\'ve clicked $route times!'),
+      ),
+    );
   },
-);
+)
 ```

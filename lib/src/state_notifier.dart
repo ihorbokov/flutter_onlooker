@@ -26,13 +26,13 @@ abstract class StateNotifier {
   ///
   /// Throws [StateError] if some type of `state` registered twice or if [StateNotifier] was disposed.
   @protected
-  void observable<S>({S? initial}) {
+  void observable<S>({required S initial}) {
     if (_disposed) {
       throw StateError('Can\'t register state - $runtimeType is disposed.');
     }
     _stateController[S] = _StateItem<S>(
-      StreamController<S?>.broadcast(),
-      initialState: initial,
+      initial,
+      StreamController<S>.broadcast(),
     );
   }
 
@@ -40,22 +40,22 @@ abstract class StateNotifier {
   ///
   /// Throws [StateError] if [StateNotifier] was disposed.
   /// Throws [ArgumentError] if state of such type was not registered.
-  S? initial<S>() {
+  S initial<S>() {
     if (_disposed) {
       throw StateError('Can\'t get initial state - $runtimeType is disposed.');
     }
-    return _stateController[S].initialState as S?;
+    return _stateController[S].initialState as S;
   }
 
   /// Returns the latest value for state of `S` type.
   ///
   /// Throws [StateError] if [StateNotifier] was disposed.
   /// Throws [ArgumentError] if state of such type was not registered.
-  S? latest<S>() {
+  S latest<S>() {
     if (_disposed) {
       throw StateError('Can\'t get latest state - $runtimeType is disposed.');
     }
-    return _stateController[S].latestState as S?;
+    return _stateController[S].latestState as S;
   }
 
   /// Checks whether a state of `S` type was registered before.
@@ -75,7 +75,7 @@ abstract class StateNotifier {
   /// Throws [StateError] if [StateNotifier] was disposed.
   /// Throws [ArgumentError] if state of such type was not registered.
   @protected
-  void notify<S>(S? state) {
+  void notify<S>(S state) {
     if (_disposed) {
       throw StateError('Can\'t notify - $runtimeType is disposed.');
     }
@@ -110,7 +110,7 @@ abstract class StateNotifier {
   /// Returns `null` if this [StateNotifier] was disposed.
   ///
   /// Throws [ArgumentError] if state of such type was not registered.
-  Stream<S?>? getStateStream<S>() =>
+  Stream<S>? getStateStream<S>() =>
       _disposed ? null : _stateController.getStream<S>();
 
   /// Returns navigation stream.
@@ -170,8 +170,8 @@ class _StateController extends MapBase<Type, _StateItem> {
     _stateItems[key] = value;
   }
 
-  Stream<S?> getStream<S>() =>
-      (this[S].controller as StreamController<S?>).stream;
+  Stream<S> getStream<S>() =>
+      (this[S].controller as StreamController<S>).stream;
 
   @override
   Iterable<Type> get keys => _stateItems.keys;
@@ -189,13 +189,13 @@ class _StateController extends MapBase<Type, _StateItem> {
 }
 
 class _StateItem<S> {
-  final StreamController<S?> controller;
-  final S? initialState;
-  S? latestState;
+  final StreamController<S> controller;
+  final S initialState;
+  S latestState;
 
-  _StateItem(this.controller, {this.initialState}) : latestState = initialState;
+  _StateItem(this.initialState, this.controller) : latestState = initialState;
 
-  void add(S? state) {
+  void add(S state) {
     if (!controller.isClosed) {
       latestState = state;
       controller.sink.add(state);
