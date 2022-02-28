@@ -1,3 +1,7 @@
+# 2.0.1
+
+- Improved of code naming.
+
 # 2.0.0
 
 - Limited of nullable states usage.

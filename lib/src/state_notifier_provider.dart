@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'state_notifier.dart';
-import 'state_notifier_subscriber.dart';
+import 'state_subscriber.dart';
 
 /// A function that creates an object of type [T].
 typedef Create<T> = T Function(BuildContext context);
@@ -55,7 +55,7 @@ class Provider<N extends StateNotifier> extends InheritedWidget {
 /// [child] which will have access to the instance via `Provider.of<StateNotifier>(context)` or
 /// `context.read<StateNotifier>()` and optional [router] function that will receive navigation events.
 class StateNotifierProvider<N extends StateNotifier>
-    extends StateNotifierSubscriber<NavigationItem> {
+    extends StateSubscriber<NavigationItem> {
   final Create<N> create;
   final Widget child;
   final Router? router;
@@ -73,8 +73,7 @@ class StateNotifierProvider<N extends StateNotifier>
 }
 
 class _StateNotifierProviderState<N extends StateNotifier>
-    extends StateNotifierSubscriberState<NavigationItem,
-        StateNotifierProvider<N>> {
+    extends StateSubscriberState<NavigationItem, StateNotifierProvider<N>> {
   late final N _stateNotifier = widget.create(context);
 
   @override

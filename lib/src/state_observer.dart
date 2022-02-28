@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import 'state_notifier.dart';
 import 'state_notifier_provider.dart';
-import 'state_notifier_subscriber.dart';
+import 'state_subscriber.dart';
 
 /// Signature for the `buildWhen` function which takes the previous `state` and
 /// the current `state` and is responsible for returning a [bool] which
@@ -16,8 +16,7 @@ typedef BuilderCondition<S> = bool Function(S previous, S current);
 typedef WidgetBuilder<S> = Widget Function(BuildContext context, S state);
 
 /// [StateObserver] handles building a widget in response to new `states`.
-class StateObserver<N extends StateNotifier, S>
-    extends StateNotifierSubscriber<S> {
+class StateObserver<N extends StateNotifier, S> extends StateSubscriber<S> {
   final N? notifier;
   final BuilderCondition<S>? buildWhen;
   final WidgetBuilder<S> builder;
@@ -40,7 +39,7 @@ class StateObserver<N extends StateNotifier, S>
 }
 
 class _StateObserverState<N extends StateNotifier, S>
-    extends StateNotifierSubscriberState<S, StateObserver<N, S>> {
+    extends StateSubscriberState<S, StateObserver<N, S>> {
   late N _stateNotifier = widget.notifier ?? context.read<N>();
 
   late S _state = _initialState;

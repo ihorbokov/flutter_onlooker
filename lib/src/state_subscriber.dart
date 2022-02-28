@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
-abstract class StateNotifierSubscriber<S> extends StatefulWidget {
-  const StateNotifierSubscriber({Key? key}) : super(key: key);
+abstract class StateSubscriber<S> extends StatefulWidget {
+  const StateSubscriber({Key? key}) : super(key: key);
 }
 
-abstract class StateNotifierSubscriberState<S,
-    T extends StateNotifierSubscriber<S>> extends State<T> {
+abstract class StateSubscriberState<S, T extends StateSubscriber<S>>
+    extends State<T> {
   StreamSubscription<S>? _subscription;
 
   @protected
