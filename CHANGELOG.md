@@ -1,3 +1,7 @@
+# 2.0.2
+
+- Code refactoring.
+
 # 2.0.1
 
 - Improved of code naming.

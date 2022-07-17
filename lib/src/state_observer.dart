@@ -17,10 +17,6 @@ typedef WidgetBuilder<S> = Widget Function(BuildContext context, S state);
 
 /// [StateObserver] handles building a widget in response to new `states`.
 class StateObserver<N extends StateNotifier, S> extends StateSubscriber<S> {
-  final N? notifier;
-  final BuilderCondition<S>? buildWhen;
-  final WidgetBuilder<S> builder;
-
   /// [StateObserver] rebuilds using [builder] function.
   ///
   /// An optional [notifier] can be passed directly.
@@ -33,6 +29,10 @@ class StateObserver<N extends StateNotifier, S> extends StateSubscriber<S> {
     this.buildWhen,
     required this.builder,
   }) : super(key: key);
+
+  final N? notifier;
+  final BuilderCondition<S>? buildWhen;
+  final WidgetBuilder<S> builder;
 
   @override
   State<StatefulWidget> createState() => _StateObserverState<N, S>();

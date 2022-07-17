@@ -23,13 +23,13 @@ extension ReadContext on BuildContext {
 /// A generic implementation of [InheritedWidget] that allows to obtain [StateNotifier]
 /// using [Provider.of] for any descendant of this widget.
 class Provider<N extends StateNotifier> extends InheritedWidget {
-  final N stateNotifier;
-
   const Provider._({
     Key? key,
     required this.stateNotifier,
     required Widget child,
   }) : super(key: key, child: child);
+
+  final N stateNotifier;
 
   /// Obtains the nearest [StateNotifier] up its widget tree.
   ///
@@ -56,16 +56,16 @@ class Provider<N extends StateNotifier> extends InheritedWidget {
 /// `context.read<StateNotifier>()` and optional [router] function that will receive navigation events.
 class StateNotifierProvider<N extends StateNotifier>
     extends StateSubscriber<NavigationItem> {
-  final Create<N> create;
-  final Widget child;
-  final Router? router;
-
   const StateNotifierProvider({
     Key? key,
     required this.create,
     required this.child,
     this.router,
   }) : super(key: key);
+
+  final Create<N> create;
+  final Widget child;
+  final Router? router;
 
   @override
   _StateNotifierProviderState<N> createState() =>

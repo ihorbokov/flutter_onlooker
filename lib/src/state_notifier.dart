@@ -128,9 +128,9 @@ abstract class StateNotifier {
 }
 
 class _NavigationController<T> {
-  final StreamController<T> _controller;
-
   _NavigationController(this._controller);
+
+  final StreamController<T> _controller;
 
   void add(T navigationItem) {
     if (!_controller.isClosed && _controller.hasListener) {
@@ -144,10 +144,10 @@ class _NavigationController<T> {
 }
 
 class NavigationItem<T> {
+  NavigationItem(this.route, this.resultConsumer);
+
   final dynamic route;
   final ResultConsumer<T> resultConsumer;
-
-  NavigationItem(this.route, this.resultConsumer);
 }
 
 class _StateController extends MapBase<Type, _StateItem> {
@@ -189,11 +189,11 @@ class _StateController extends MapBase<Type, _StateItem> {
 }
 
 class _StateItem<S> {
+  _StateItem(this.initialState, this.controller) : latestState = initialState;
+
   final StreamController<S> controller;
   final S initialState;
   S latestState;
-
-  _StateItem(this.initialState, this.controller) : latestState = initialState;
 
   void add(S state) {
     if (!controller.isClosed) {

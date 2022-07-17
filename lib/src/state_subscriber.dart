@@ -24,7 +24,10 @@ abstract class StateSubscriberState<S, T extends StateSubscriber<S>>
 
   void _subscribe() => _subscription = stream?.listen(onNewState);
 
-  void _unsubscribe() => _subscription?.cancel();
+  void _unsubscribe() {
+    _subscription?.cancel();
+    _subscription = null;
+  }
 
   @protected
   void resubscribe() {
