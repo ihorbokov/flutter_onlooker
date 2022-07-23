@@ -7,7 +7,8 @@ import 'state_subscriber.dart';
 typedef Create<T> = T Function(BuildContext context);
 
 /// A function that listens for navigation events.
-/// Return navigation `result` from this function to get that in [StateNotifier].
+/// Return navigation `result` from this function
+/// to get that in [StateNotifier].
 typedef Router<T> = Future<T>? Function(
   BuildContext context,
   dynamic route,
@@ -20,20 +21,22 @@ extension ReadContext on BuildContext {
       Provider.of<N>(this, listen: listen);
 }
 
-/// A generic implementation of [InheritedWidget] that allows to obtain [StateNotifier]
-/// using [Provider.of] for any descendant of this widget.
+/// A generic implementation of [InheritedWidget] that allows to obtain
+/// [StateNotifier] using [Provider.of] for any descendant of this widget.
 class Provider<N extends StateNotifier> extends InheritedWidget {
   const Provider._({
-    Key? key,
     required this.stateNotifier,
     required Widget child,
+    Key? key,
   }) : super(key: key, child: child);
 
+  /// The nearest [StateNotifier] up its widget tree.
   final N stateNotifier;
 
   /// Obtains the nearest [StateNotifier] up its widget tree.
   ///
-  /// The build context is rebuilt when [StateNotifier] is changed if [listen] set to `true`.
+  /// The build context is rebuilt when [StateNotifier] is changed
+  /// if [listen] set to `true`.
   static N of<N extends StateNotifier>(
     BuildContext context, {
     bool listen = false,
@@ -51,20 +54,28 @@ class Provider<N extends StateNotifier> extends InheritedWidget {
       oldWidget.stateNotifier != stateNotifier;
 }
 
-/// Takes a [Create] function that is responsible for creating the [StateNotifier],
-/// [child] which will have access to the instance via `Provider.of<StateNotifier>(context)` or
-/// `context.read<StateNotifier>()` and optional [router] function that will receive navigation events.
+/// {@template state_notifier_provider}
+/// Takes a [Create] function that is responsible for creating
+/// the [StateNotifier], [child] which will have access to the instance via
+/// `Provider.of<StateNotifier>(context)` or `context.read<StateNotifier>()`
+/// and optional [router] function that will receive navigation events.
 class StateNotifierProvider<N extends StateNotifier>
     extends StateSubscriber<NavigationItem> {
+  /// {@macro state_notifier_provider}
   const StateNotifierProvider({
-    Key? key,
     required this.create,
     required this.child,
     this.router,
+    Key? key,
   }) : super(key: key);
 
+  /// The function that is responsible for creating the [StateNotifier].
   final Create<N> create;
+
+  /// The widget which will have access to the [StateNotifier].
   final Widget child;
+
+  /// An optional function that will receive navigation events.
   final Router? router;
 
   @override

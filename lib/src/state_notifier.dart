@@ -3,12 +3,13 @@ import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
 
-/// A callback function that is used to return navigation result to the [StateNotifier].
+/// A callback function that is used to return navigation result
+/// to the [StateNotifier].
 typedef ResultConsumer<T> = void Function(Future<T>?);
 
 /// This class provides mechanism of delivering new UI `states` and navigation
-/// `events` to widgets. Widgets should use [getStateStream] and [getNavigationStream]
-/// to observe on [StateNotifier] events.
+/// `events` to widgets. Widgets should use [getStateStream]
+/// and [getNavigationStream] to observe on [StateNotifier] events.
 abstract class StateNotifier {
   final _stateController = _StateController();
   final _navigationController = _NavigationController(
@@ -20,11 +21,13 @@ abstract class StateNotifier {
   /// Defines whether [StateNotifier] was disposed.
   bool get disposed => _disposed;
 
-  /// Registers observable state of `S` type that can be processed by this [StateNotifier].
+  /// Registers observable state of `S` type that can be processed by
+  /// this [StateNotifier].
   ///
   /// [initial] defines initial state of observable type.
   ///
-  /// Throws [StateError] if some type of `state` registered twice or if [StateNotifier] was disposed.
+  /// Throws [StateError] if some type of `state` registered twice or
+  /// if [StateNotifier] was disposed.
   @protected
   void observable<S>({required S initial}) {
     if (_disposed) {
@@ -88,7 +91,8 @@ abstract class StateNotifier {
   /// Returns a [Future] that completes to the `result` value that
   /// can be returned from `router` function using `return` keyword.
   ///
-  /// Throws [StateError] if navigation result was returned twice or if [StateNotifier] was disposed.
+  /// Throws [StateError] if navigation result was returned twice or
+  /// if [StateNotifier] was disposed.
   @protected
   Future<T?> navigate<T extends Object?>(dynamic route) {
     if (_disposed) {
@@ -143,10 +147,20 @@ class _NavigationController<T> {
   void close() => _controller.close();
 }
 
+/// {@template navigation_item}
+/// Takes a [route] and a [resultConsumer] which are responsible for navigation
+/// from the [StateNotifier] and getting result directly to it.
 class NavigationItem<T> {
-  NavigationItem(this.route, this.resultConsumer);
+  /// {@macro navigation_item}
+  NavigationItem(
+    this.route,
+    this.resultConsumer,
+  );
 
+  /// The route value for detecting a navigation.
   final dynamic route;
+
+  /// The function for receiving a navigation result to the [StateNotifier].
   final ResultConsumer<T> resultConsumer;
 }
 

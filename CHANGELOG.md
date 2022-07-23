@@ -1,3 +1,7 @@
+# 2.0.3
+
+- Documented public api.
+
 # 2.0.2
 
 - Code refactoring.

@@ -15,24 +15,32 @@ typedef BuilderCondition<S> = bool Function(S previous, S current);
 /// [state] and is responsible for returning a widget which is to be rendered.
 typedef WidgetBuilder<S> = Widget Function(BuildContext context, S state);
 
-/// [StateObserver] handles building a widget in response to new `states`.
+/// {@template state_observer}
+/// [StateObserver] rebuilds using [builder] function in response
+/// to new `states`.
+///
+/// An optional [notifier] can be passed directly.
+///
+/// An optional [buildWhen] can be implemented for more granular control over
+/// how often [StateObserver] rebuilds.
 class StateObserver<N extends StateNotifier, S> extends StateSubscriber<S> {
-  /// [StateObserver] rebuilds using [builder] function.
-  ///
-  /// An optional [notifier] can be passed directly.
-  ///
-  /// An optional [buildWhen] can be implemented for more granular control over
-  /// how often [StateObserver] rebuilds.
+  /// {@macro state_observer}
   const StateObserver({
-    Key? key,
+    required this.builder,
     this.notifier,
     this.buildWhen,
-    required this.builder,
+    Key? key,
   }) : super(key: key);
 
-  final N? notifier;
-  final BuilderCondition<S>? buildWhen;
+  /// The function which will be invoked on each widget build.
   final WidgetBuilder<S> builder;
+
+  /// An optional [StateNotifier] can be passed directly.
+  final N? notifier;
+
+  /// An optional function can be implemented for more granular control over
+  /// how often [StateObserver] rebuilds.
+  final BuilderCondition<S>? buildWhen;
 
   @override
   State<StatefulWidget> createState() => _StateObserverState<N, S>();
