@@ -54,7 +54,7 @@ StateNotifierProvider<IncrementStateNotifier>(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Counter info'),
-        content: Text('You\'ve clicked $route times!'),
+        content: Text("You've clicked $route times!"),
       ),
     );
   },

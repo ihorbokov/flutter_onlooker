@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
             context: context,
             builder: (_) => AlertDialog(
               title: const Text('Counter info'),
-              content: Text('You\'ve clicked $route times!'),
+              content: Text("You've clicked $route times!"),
             ),
           );
         },
@@ -50,7 +50,7 @@ class MyHomePage extends StatelessWidget {
               'You have pushed the button this many times:',
             ),
             const SizedBox(
-              height: 8.0,
+              height: 8,
             ),
             StateObserver<IncrementStateNotifier, int>(
               builder: (_, state) {
@@ -61,7 +61,7 @@ class MyHomePage extends StatelessWidget {
               },
             ),
             const SizedBox(
-              height: 8.0,
+              height: 8,
             ),
             ElevatedButton(
               onPressed: context.read<IncrementStateNotifier>().showCounterInfo,

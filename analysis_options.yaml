@@ -91,4 +91,3 @@ linter:
     - use_rethrow_when_possible
     - use_setters_to_change_properties
     - valid_regexps
-    - prefer_relative_imports

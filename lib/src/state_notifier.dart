@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 /// A callback function that is used to return navigation result
 /// to the [StateNotifier].
-typedef ResultConsumer<T> = void Function(Future<T>?);
+typedef ResultConsumer = void Function(Future<dynamic>?);
 
 /// This class provides mechanism of delivering new UI `states` and navigation
 /// `events` to widgets. Widgets should use [getStateStream]
@@ -31,7 +31,7 @@ abstract class StateNotifier {
   @protected
   void observable<S>({required S initial}) {
     if (_disposed) {
-      throw StateError('Can\'t register state - $runtimeType is disposed.');
+      throw StateError("Can't register state - $runtimeType is disposed.");
     }
     _stateController[S] = _StateItem<S>(
       initial,
@@ -45,7 +45,7 @@ abstract class StateNotifier {
   /// Throws [ArgumentError] if state of such type was not registered.
   S initial<S>() {
     if (_disposed) {
-      throw StateError('Can\'t get initial state - $runtimeType is disposed.');
+      throw StateError("Can't get initial state - $runtimeType is disposed.");
     }
     return _stateController[S].initialState as S;
   }
@@ -56,7 +56,7 @@ abstract class StateNotifier {
   /// Throws [ArgumentError] if state of such type was not registered.
   S latest<S>() {
     if (_disposed) {
-      throw StateError('Can\'t get latest state - $runtimeType is disposed.');
+      throw StateError("Can't get latest state - $runtimeType is disposed.");
     }
     return _stateController[S].latestState as S;
   }
@@ -66,7 +66,7 @@ abstract class StateNotifier {
   /// Throws [StateError] if [StateNotifier] was disposed.
   bool contains<S>() {
     if (_disposed) {
-      throw StateError('Can\'t check state - $runtimeType is disposed.');
+      throw StateError("Can't check state - $runtimeType is disposed.");
     }
     return _stateController.containsKey(S);
   }
@@ -80,7 +80,7 @@ abstract class StateNotifier {
   @protected
   void notify<S>(S state) {
     if (_disposed) {
-      throw StateError('Can\'t notify - $runtimeType is disposed.');
+      throw StateError("Can't notify - $runtimeType is disposed.");
     }
     _stateController[S].add(state);
   }
@@ -96,16 +96,18 @@ abstract class StateNotifier {
   @protected
   Future<T?> navigate<T extends Object?>(dynamic route) {
     if (_disposed) {
-      throw StateError('Can\'t navigate - $runtimeType is disposed.');
+      throw StateError("Can't navigate - $runtimeType is disposed.");
     }
+
     final resultCompleter = Completer<T?>();
-    final resultConsumer = (Future<dynamic>? result) {
+    void resultConsumer(Future<dynamic>? result) {
       if (resultCompleter.isCompleted) {
         throw StateError('Navigation result has been already returned.');
       }
       resultCompleter.complete(result?.then((dynamic value) => value as T?));
-    };
-    _navigationController.add(NavigationItem<T>(route, resultConsumer));
+    }
+
+    _navigationController.add(NavigationItem(route, resultConsumer));
     return resultCompleter.future;
   }
 
@@ -124,10 +126,11 @@ abstract class StateNotifier {
       _disposed ? null : _navigationController.stream;
 
   /// Closes `state` and `navigation` streams.
-  void dispose() {
+  @mustCallSuper
+  Future<void> close() async {
     _disposed = true;
-    _stateController.close();
-    _navigationController.close();
+    await _stateController.close();
+    await _navigationController.close();
   }
 }
 
@@ -144,13 +147,13 @@ class _NavigationController<T> {
 
   Stream<T> get stream => _controller.stream;
 
-  void close() => _controller.close();
+  Future<void> close() => _controller.close();
 }
 
 /// {@template navigation_item}
 /// Takes a [route] and a [resultConsumer] which are responsible for navigation
 /// from the [StateNotifier] and getting result directly to it.
-class NavigationItem<T> {
+class NavigationItem {
   /// {@macro navigation_item}
   NavigationItem(
     this.route,
@@ -161,23 +164,23 @@ class NavigationItem<T> {
   final dynamic route;
 
   /// The function for receiving a navigation result to the [StateNotifier].
-  final ResultConsumer<T> resultConsumer;
+  final ResultConsumer resultConsumer;
 }
 
-class _StateController extends MapBase<Type, _StateItem> {
-  final _stateItems = <Type, _StateItem>{};
+class _StateController extends MapBase<Type, _StateItem<dynamic>> {
+  final _stateItems = <Type, _StateItem<dynamic>>{};
 
   @override
-  _StateItem operator [](Object? key) {
+  _StateItem<dynamic> operator [](Object? key) {
     final stateItem = _stateItems[key];
     if (stateItem == null) {
-      throw ArgumentError('State with type $key wasn\'t found as observable.');
+      throw ArgumentError("State with type $key wasn't found as observable.");
     }
     return stateItem;
   }
 
   @override
-  void operator []=(Type key, _StateItem value) {
+  void operator []=(Type key, _StateItem<dynamic> value) {
     if (_stateItems.containsKey(key)) {
       throw ArgumentError('State with type $key is already observable.');
     }
@@ -191,13 +194,15 @@ class _StateController extends MapBase<Type, _StateItem> {
   Iterable<Type> get keys => _stateItems.keys;
 
   @override
-  _StateItem? remove(Object? key) => _stateItems.remove(key);
+  _StateItem<dynamic>? remove(Object? key) => _stateItems.remove(key);
 
   @override
   void clear() => _stateItems.clear();
 
-  void close() {
-    forEach((_, item) => item.controller.close());
+  Future<void> close() async {
+    for (final item in values) {
+      await item.controller.close();
+    }
     clear();
   }
 }

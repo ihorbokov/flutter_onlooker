@@ -1,6 +1,6 @@
 name: flutter_onlooker
 description: A state management library which provides a simple solution for updating state and navigation.
-version: 2.0.3
+version: 2.1.0
 homepage: https://github.com/phimary/flutter_onlooker
 
 environment:

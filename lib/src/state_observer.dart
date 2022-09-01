@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-
-import 'state_notifier.dart';
-import 'state_notifier_provider.dart';
-import 'state_subscriber.dart';
+import 'package:flutter_onlooker/src/state_notifier.dart';
+import 'package:flutter_onlooker/src/state_notifier_provider.dart';
+import 'package:flutter_onlooker/src/state_subscriber.dart';
 
 /// Signature for the `buildWhen` function which takes the previous `state` and
 /// the current `state` and is responsible for returning a [bool] which

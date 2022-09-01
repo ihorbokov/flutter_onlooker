@@ -1,3 +1,7 @@
+# 2.1.0
+
+- Renamed `dispose` method to `close`.
+
 # 2.0.3
 
 - Documented public api.

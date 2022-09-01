@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
-
-import 'state_notifier.dart';
-import 'state_subscriber.dart';
+import 'package:flutter_onlooker/src/state_notifier.dart';
+import 'package:flutter_onlooker/src/state_subscriber.dart';
 
 /// A function that creates an object of type [T].
 typedef Create<T> = T Function(BuildContext context);
@@ -9,7 +8,7 @@ typedef Create<T> = T Function(BuildContext context);
 /// A function that listens for navigation events.
 /// Return navigation `result` from this function
 /// to get that in [StateNotifier].
-typedef Router<T> = Future<T>? Function(
+typedef Router = Future<dynamic>? Function(
   BuildContext context,
   dynamic route,
 );
@@ -44,7 +43,7 @@ class Provider<N extends StateNotifier> extends InheritedWidget {
     final provider = listen
         ? context.dependOnInheritedWidgetOfExactType<Provider<N>>()
         : context.getElementForInheritedWidgetOfExactType<Provider<N>>()?.widget
-            as Provider<N>;
+            as Provider<N>?;
     assert(provider != null, 'No Provider<${N.runtimeType}> found in context.');
     return provider!.stateNotifier;
   }
@@ -79,7 +78,7 @@ class StateNotifierProvider<N extends StateNotifier>
   final Router? router;
 
   @override
-  _StateNotifierProviderState<N> createState() =>
+  State<StateNotifierProvider<N>> createState() =>
       _StateNotifierProviderState<N>();
 }
 
@@ -107,7 +106,7 @@ class _StateNotifierProviderState<N extends StateNotifier>
 
   @override
   void dispose() {
-    _stateNotifier.dispose();
+    _stateNotifier.close();
     super.dispose();
   }
 }
