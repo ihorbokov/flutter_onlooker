@@ -5,8 +5,6 @@
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 </p>
 
----
-
 A state management library which provides a simple solution for updating state and navigation.
 
 ## Usage
