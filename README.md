@@ -20,11 +20,11 @@ Lets take a look at how to use `flutter_onlooker`. The library provides: `StateN
 
 ```dart
 class IncrementStateNotifier extends StateNotifier {
-  int _counter = 0;
-
   IncrementStateNotifier() {
     observable<int>(initial: _counter);
   }
+
+  var _counter = 0;
 
   void useCase() {
     final initialState = initial<int>();
@@ -32,12 +32,12 @@ class IncrementStateNotifier extends StateNotifier {
     final containsState = contains<int>();
 
     notify<int>(++_counter);
-    navigate<void>('/route-name', arguments: _counter);
+    navigate<void>('/route', arguments: _counter);
   }
 }
 ```
 2. `StateObserver` handles building a widget in response to new `states`. It takes 3 parameters:
-* required `builder` function that takes the `BuildContext` and `state`, this function is responsible for returning a widget which is to be rendered.
+* required `builder` function that takes the `BuildContext` and `state`, this function is responsible for returning a widget that is to be rendered.
 * An optional `notifier` that can be passed directly or with using `StateNotifierProvider`.
 * An optional `buildWhen` can be implemented for more granular control over how often `StateObserver` rebuilds.
 ```dart
