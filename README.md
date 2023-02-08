@@ -5,7 +5,7 @@
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 </p>
 
-A state management library which provides a simple solution for updating state and navigation.
+A state management library that provides a simple solution for updating state and navigation.
 
 ## Usage
 Lets take a look at how to use `flutter_onlooker`. The library provides: `StateNotifier`, `StateObserver` and `StateNotifierProvider` classes.
@@ -37,8 +37,8 @@ class IncrementStateNotifier extends StateNotifier {
 }
 ```
 2. `StateObserver` handles building a widget in response to new `states`. It takes 3 parameters:
-* required `builder` function which takes the `BuildContext` and `state`, this function is responsible for returning a widget which is to be rendered.
-* An optional `notifier` which can be passed directly or with using `StateNotifierProvider`.
+* required `builder` function that takes the `BuildContext` and `state`, this function is responsible for returning a widget which is to be rendered.
+* An optional `notifier` that can be passed directly or with using `StateNotifierProvider`.
 * An optional `buildWhen` can be implemented for more granular control over how often `StateObserver` rebuilds.
 ```dart
 StateObserver<IncrementStateNotifier, int>(
@@ -50,7 +50,7 @@ StateObserver<IncrementStateNotifier, int>(
   },
 )
 ```
-3. `StateNotifierProvider` - takes a `create` function that is responsible for creating the `StateNotifier`, `child` widget which will have access to the `StateNotifier` instance via `Provider.of<StateNotifier>(context)` or `context.read<StateNotifier>()` and optional `router` function which will receive navigation events.
+3. `StateNotifierProvider` takes a `create` function that is responsible for creating the `StateNotifier`, `child` widget that will have access to the `StateNotifier` instance via `Provider.of<StateNotifier>(context)` or `context.read<StateNotifier>()` and optional `router` function that will receive navigation events.
 ```dart
 StateNotifierProvider<IncrementStateNotifier>(
   create: (_) => IncrementStateNotifier(),

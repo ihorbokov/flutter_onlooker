@@ -1,3 +1,7 @@
+# 3.0.1
+
+- Updated example and Readme.
+
 # 3.0.0
 
 - Changed method `navigate`.
