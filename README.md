@@ -11,12 +11,12 @@ A state management library that provides a simple solution for updating state an
 Lets take a look at how to use `flutter_onlooker`. The library provides: `StateNotifier`, `StateObserver` and `StateNotifierProvider` classes.
 
 1. `StateNotifier` is responsible for registering and notifying states. Also it can emit navigation events. The main methods of this class:
-* `observable<S>` - registers observable state of `S` type.
-* `initial<S>` - returns initial value for state of `S` type.
-* `latest<S>` - returns the latest value for state of `S` type.
-* `contains<S>` - checks whether a state of `S` type was registered before.
-* `notify<S>` - notifies a new state of `S` type.
-* `navigate<T extends Object?>` - notifies a new navigation event.
+* `observable<S>` registers observable state of `S` type.
+* `initial<S>` returns initial value for state of `S` type.
+* `latest<S>` returns the latest value for state of `S` type.
+* `contains<S>` checks whether a state of `S` type was registered before.
+* `notify<S>` notifies a new state of `S` type.
+* `navigate<T extends Object?>` notifies a new navigation event.
 
 ```dart
 class IncrementStateNotifier extends StateNotifier {
