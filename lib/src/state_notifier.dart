@@ -33,7 +33,7 @@ abstract class StateNotifier {
     if (_disposed) {
       throw StateError("Can't register state - $runtimeType is disposed.");
     }
-    _stateController[S] = _StateItem<S>(
+    _stateController[S] = _StateItem(
       initial,
       StreamController<S>.broadcast(),
     );
@@ -87,14 +87,19 @@ abstract class StateNotifier {
 
   /// Notifies a new navigation event.
   ///
-  /// [route] defines data of navigation event.
+  /// [routeName] defines a value for detecting a navigation.
+  /// [arguments] defines arguments of a navigation.
+  ///
   /// Returns a [Future] that completes to the `result` value that
   /// can be returned from `router` function using `return` keyword.
   ///
   /// Throws [StateError] if navigation result was returned twice or
   /// if [StateNotifier] was disposed.
   @protected
-  Future<T?> navigate<T extends Object?>(dynamic route) {
+  Future<T?> navigate<T extends Object?>(
+    String routeName, {
+    Object? arguments,
+  }) {
     if (_disposed) {
       throw StateError("Can't navigate - $runtimeType is disposed.");
     }
@@ -107,7 +112,13 @@ abstract class StateNotifier {
       resultCompleter.complete(result?.then((dynamic value) => value as T?));
     }
 
-    _navigationController.add(NavigationItem(route, resultConsumer));
+    _navigationController.add(
+      NavigationItem(
+        routeName,
+        arguments,
+        resultConsumer,
+      ),
+    );
     return resultCompleter.future;
   }
 
@@ -134,44 +145,49 @@ abstract class StateNotifier {
   }
 }
 
-class _NavigationController<T> {
+class _NavigationController {
   _NavigationController(this._controller);
 
-  final StreamController<T> _controller;
+  final StreamController<NavigationItem> _controller;
 
-  void add(T navigationItem) {
+  void add(NavigationItem navigation) {
     if (!_controller.isClosed && _controller.hasListener) {
-      _controller.sink.add(navigationItem);
+      _controller.add(navigation);
     }
   }
 
-  Stream<T> get stream => _controller.stream;
+  Stream<NavigationItem> get stream => _controller.stream;
 
   Future<void> close() => _controller.close();
 }
 
 /// {@template navigation_item}
-/// Takes a [route] and a [resultConsumer] which are responsible for navigation
-/// from the [StateNotifier] and getting result directly to it.
+/// Takes [routeName], [arguments], and [resultConsumer] which are responsible
+/// for navigation from the [StateNotifier] and getting result directly to it.
+/// {@endtemplate}
 class NavigationItem {
   /// {@macro navigation_item}
   NavigationItem(
-    this.route,
+    this.routeName,
+    this.arguments,
     this.resultConsumer,
   );
 
-  /// The route value for detecting a navigation.
-  final dynamic route;
+  /// Value for detecting a navigation.
+  final String routeName;
+
+  /// Arguments of a navigation.
+  final Object? arguments;
 
   /// The function for receiving a navigation result to the [StateNotifier].
   final ResultConsumer resultConsumer;
 }
 
-class _StateController extends MapBase<Type, _StateItem<dynamic>> {
-  final _stateItems = <Type, _StateItem<dynamic>>{};
+class _StateController extends MapBase<Type, _StateItem> {
+  final _stateItems = <Type, _StateItem>{};
 
   @override
-  _StateItem<dynamic> operator [](Object? key) {
+  _StateItem operator [](Object? key) {
     final stateItem = _stateItems[key];
     if (stateItem == null) {
       throw ArgumentError("State with type $key wasn't found as observable.");
@@ -180,7 +196,7 @@ class _StateController extends MapBase<Type, _StateItem<dynamic>> {
   }
 
   @override
-  void operator []=(Type key, _StateItem<dynamic> value) {
+  void operator []=(Type key, _StateItem value) {
     if (_stateItems.containsKey(key)) {
       throw ArgumentError('State with type $key is already observable.');
     }
@@ -194,30 +210,33 @@ class _StateController extends MapBase<Type, _StateItem<dynamic>> {
   Iterable<Type> get keys => _stateItems.keys;
 
   @override
-  _StateItem<dynamic>? remove(Object? key) => _stateItems.remove(key);
+  _StateItem? remove(Object? key) => _stateItems.remove(key);
 
   @override
   void clear() => _stateItems.clear();
 
   Future<void> close() async {
-    for (final item in values) {
-      await item.controller.close();
-    }
+    await Future.wait(
+      values.map((item) => item.controller.close()),
+    );
     clear();
   }
 }
 
-class _StateItem<S> {
-  _StateItem(this.initialState, this.controller) : latestState = initialState;
+class _StateItem {
+  _StateItem(
+    this.initialState,
+    this.controller,
+  ) : latestState = initialState;
 
-  final StreamController<S> controller;
-  final S initialState;
-  S latestState;
+  final StreamController<dynamic> controller;
+  final dynamic initialState;
+  dynamic latestState;
 
-  void add(S state) {
+  void add(dynamic state) {
     if (!controller.isClosed) {
       latestState = state;
-      controller.sink.add(state);
+      controller.add(state);
     }
   }
 }

@@ -1,3 +1,7 @@
+# 3.0.0
+
+- Changed method `navigate`.
+
 # 2.1.0
 
 - Renamed `dispose` method to `close`.

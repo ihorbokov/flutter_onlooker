@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 /// {@template state_subscriber}
 /// Base [StatefulWidget] class for widgets that listens to `states`.
+/// {@endtemplate}
 abstract class StateSubscriber<S> extends StatefulWidget {
   /// {@macro state_subscriber}
   const StateSubscriber({Key? key}) : super(key: key);
@@ -30,10 +31,7 @@ abstract class StateSubscriberState<S, T extends StateSubscriber<S>>
 
   void _subscribe() => _subscription = stream?.listen(onNewState);
 
-  void _unsubscribe() {
-    _subscription?.cancel();
-    _subscription = null;
-  }
+  void _unsubscribe() => _subscription?.cancel();
 
   /// Resubscribes to the subscriber's [stream].
   @protected

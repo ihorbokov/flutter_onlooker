@@ -1,4 +1,12 @@
 # Onlooker
+<p>
+<a href="https://pub.dev/packages/flutter_onlooker"><img src="https://img.shields.io/pub/v/flutter_onlooker.svg" alt="Pub"></a>
+<a href="https://pub.dev/packages/very_good_analysis"><img src="https://img.shields.io/badge/style-very_good_analysis-B22C89.svg" alt="style: very good analysis"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
+</p>
+
+---
+
 A state management library which provides a simple solution for updating state and navigation.
 
 ## Usage
@@ -26,7 +34,7 @@ class IncrementStateNotifier extends StateNotifier {
     final containsState = contains<int>();
 
     notify<int>(++_counter);
-    navigate<void>(_counter);
+    navigate<void>('/route-name', arguments: _counter);
   }
 }
 ```
@@ -39,7 +47,7 @@ StateObserver<IncrementStateNotifier, int>(
   builder: (_, state) {
     return Text(
       '$state',
-      style: Theme.of(context).textTheme.headline4,
+      style: Theme.of(context).textTheme.headlineMedium,
     );
   },
 )
@@ -49,12 +57,12 @@ StateObserver<IncrementStateNotifier, int>(
 StateNotifierProvider<IncrementStateNotifier>(
   create: (_) => IncrementStateNotifier(),
   child: const MyHomePage(title: 'Onlooker Demo'),
-  router: (context, dynamic route) {
+  router: (context, routeName, arguments) {
     return showDialog<void>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Counter info'),
-        content: Text("You've clicked $route times!"),
+        title: Text("Route is '$routeName'"),
+        content: Text("You've clicked $arguments times!"),
       ),
     );
   },

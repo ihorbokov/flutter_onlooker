@@ -22,6 +22,7 @@ typedef WidgetBuilder<S> = Widget Function(BuildContext context, S state);
 ///
 /// An optional [buildWhen] can be implemented for more granular control over
 /// how often [StateObserver] rebuilds.
+/// {@endtemplate}
 class StateObserver<N extends StateNotifier, S> extends StateSubscriber<S> {
   /// {@macro state_observer}
   const StateObserver({

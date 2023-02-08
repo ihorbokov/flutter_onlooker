@@ -17,12 +17,12 @@ class MyApp extends StatelessWidget {
       home: StateNotifierProvider<IncrementStateNotifier>(
         create: (_) => IncrementStateNotifier(),
         child: const MyHomePage(title: 'Onlooker Demo'),
-        router: (context, dynamic route) {
+        router: (context, routeName, arguments) {
           return showDialog<void>(
             context: context,
             builder: (_) => AlertDialog(
-              title: const Text('Counter info'),
-              content: Text("You've clicked $route times!"),
+              title: Text("Route is '$routeName'"),
+              content: Text("You've clicked $arguments times!"),
             ),
           );
         },
@@ -45,7 +45,7 @@ class MyHomePage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             const Text(
               'You have pushed the button this many times:',
             ),
@@ -56,7 +56,7 @@ class MyHomePage extends StatelessWidget {
               builder: (_, state) {
                 return Text(
                   '$state',
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 );
               },
             ),
@@ -93,6 +93,9 @@ class IncrementStateNotifier extends StateNotifier {
 
   void showCounterInfo() {
     final latestState = latest<int>();
-    navigate<void>(latestState);
+    navigate<void>(
+      '/show-dialog',
+      arguments: latestState,
+    );
   }
 }

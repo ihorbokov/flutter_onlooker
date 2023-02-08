@@ -10,7 +10,8 @@ typedef Create<T> = T Function(BuildContext context);
 /// to get that in [StateNotifier].
 typedef Router = Future<dynamic>? Function(
   BuildContext context,
-  dynamic route,
+  String routeName,
+  Object? arguments,
 );
 
 /// Exposes the [read] method.
@@ -58,6 +59,7 @@ class Provider<N extends StateNotifier> extends InheritedWidget {
 /// the [StateNotifier], [child] which will have access to the instance via
 /// `Provider.of<StateNotifier>(context)` or `context.read<StateNotifier>()`
 /// and optional [router] function that will receive navigation events.
+/// {@endtemplate}
 class StateNotifierProvider<N extends StateNotifier>
     extends StateSubscriber<NavigationItem> {
   /// {@macro state_notifier_provider}
@@ -96,7 +98,11 @@ class _StateNotifierProviderState<N extends StateNotifier>
 
   @override
   void onNewState(NavigationItem state) {
-    final result = widget.router?.call(context, state.route);
+    final result = widget.router?.call(
+      context,
+      state.routeName,
+      state.arguments,
+    );
     state.resultConsumer(result);
   }
 
