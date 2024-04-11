@@ -1,3 +1,7 @@
+# 3.0.3
+
+- Updated analysis library.
+
 # 3.0.2
 
 - Refactored example.
